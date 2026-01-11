@@ -13,8 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LuminFlix",
-  description: "A modern movie streaming platform.",
+  title: 'LuminFlix - Watch TV Shows Online, Watch Movies Online',
+  description: 'Stream unlimited movies and TV shows on your favorite devices.',
+  keywords: 'streaming, movies, TV shows, entertainment',
 };
 
 export default function RootLayout({
