@@ -4,7 +4,7 @@ This is a React(Next) project displaying movies froma a backend source the trans
 
 ### Problem solved
 
-- Displays movies
+- Displays movies, categorises them and filters through be relevant topics
 
 ### Technologies used
 
@@ -39,13 +39,13 @@ npm run dev
 
 or
 
-Go to [ Luminflix ](https://transaction-list-page.vercel.app/) to view project
+Go to [ Luminflix ](https://luminflix.vercel.app/) to view project
 
 ## Screenshots
 
-- Transactions
+- Home screen
 
-![transactions](public/transactions.png)
+![ home ](public/pic.png)
 
 ### Things i would have loved to add if there was time
 
