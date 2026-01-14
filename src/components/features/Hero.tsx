@@ -27,14 +27,22 @@ const Hero: React.FC<{ movie: Movie }> = ({ movie }) => {
           <h1 className="text-5xl md:text-7xl font-bold drop-shadow-lg">
             {movie.title}
           </h1>
-          <div className="flex items-center gap-3 text-sm">
+          {/* <div className="flex items-center gap-3 text-sm">
             <span className="text-green-500 font-semibold">98% Match</span>
             <span>{movie.year}</span>
             <span className="border border-gray-400 px-1.5 py-0.5">
               {movie.rating}
             </span>
             <span>{movie.duration}</span>
+          </div> */}
+          <div className=" flex items-center gap-3">
+            <div className="w-9.5 h-9.5 rounded bg-linear-to-br from-red-600 to-red-700 text-xs font-extrabold  flex flex-col items-center justify-center">
+              <span className="">Top</span>
+              <span className="">10</span>
+            </div>
+            <p className=" font-bold text-2xl">No.2 in Films Today</p>
           </div>
+
           <p className="text-lg md:text-xl text-gray-200 max-w-xl line-clamp-3">
             {movie.description}
           </p>
