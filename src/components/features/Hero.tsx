@@ -6,9 +6,14 @@ import { useState } from "react";
 import Button from "../ui/Button";
 
 import React from "react";
+// import movieInfo from "../heroComponents/movieInfo";
+// import MovieInfo from "../heroComponents/movieInfo";
+import MovieInfo from "../heroComponents/movieInfo";
+
 
 const Hero: React.FC<{ movie: Movie }> = ({ movie }) => {
   const [muted, setMuted] = useState(true);
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="relative h-screen w-full">
@@ -27,14 +32,7 @@ const Hero: React.FC<{ movie: Movie }> = ({ movie }) => {
           <h1 className="text-5xl md:text-7xl font-bold drop-shadow-lg">
             {movie.title}
           </h1>
-          {/* <div className="flex items-center gap-3 text-sm">
-            <span className="text-green-500 font-semibold">98% Match</span>
-            <span>{movie.year}</span>
-            <span className="border border-gray-400 px-1.5 py-0.5">
-              {movie.rating}
-            </span>
-            <span>{movie.duration}</span>
-          </div> */}
+
           <div className=" flex items-center gap-3">
             <div className="w-9.5 h-9.5 rounded bg-linear-to-br from-red-600 to-red-700 text-xs font-extrabold  flex flex-col items-center justify-center">
               <span className="">Top</span>
@@ -54,13 +52,23 @@ const Hero: React.FC<{ movie: Movie }> = ({ movie }) => {
             >
               Play
             </Button>
-            <Button
+            {/* <Button
               variant="secondary"
               size="lg"
               icon={<Info className="w-6 h-6" />}
             >
               More Info
+            </Button> */}
+            <Button
+              variant="secondary"
+              size="lg"
+              icon={<Info className="w-6 h-6" />}
+              onClick={() => setOpen(true)}
+            >
+              More Info
             </Button>
+
+            {open && <MovieInfo movie={movie} onClose={() => setOpen(false)} />}
           </div>
         </div>
       </div>
