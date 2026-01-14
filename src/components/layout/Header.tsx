@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { cn } from "@/data/mockCategories";
 import Logo from "../shared/logo";
 import { Search, Bell, X } from "lucide-react";
+import Profiles from "../headerComponents/Profiles";
+// import { ChevronDown, ChevronUp } from "lucide-react";
 
 const Header: React.FC<{ scrolled: boolean }> = ({ scrolled }) => {
   const [showSearch, setShowSearch] = useState(false);
@@ -21,17 +23,23 @@ const Header: React.FC<{ scrolled: boolean }> = ({ scrolled }) => {
         <div className="flex items-center gap-8">
           <Logo />
           <nav className="hidden md:flex gap-6">
-            {["Home", "TV Shows", "Movies", "New & Popular", "My List"].map(
-              (item) => (
-                <a
-                  key={item}
-                  href="#"
-                  className="text-sm text-gray-200 hover:text-white transition"
-                >
-                  {item}
-                </a>
-              )
-            )}
+            {[
+              "Home",
+              "Series",
+              "Films",
+              "Games",
+              "New & Popular",
+              "My List",
+              "Browse by Language",
+            ].map((item) => (
+              <a
+                key={item}
+                href="#"
+                className="text-sm text-gray-200 hover:text-white transition"
+              >
+                {item}
+              </a>
+            ))}
           </nav>
         </div>
 
@@ -57,9 +65,7 @@ const Header: React.FC<{ scrolled: boolean }> = ({ scrolled }) => {
             />
           )}
           <Bell className="w-5 h-5 cursor-pointer hover:text-gray-300 transition" />
-          <div className="w-8 h-8 rounded bg-linear-to-br from-red-600 to-red-700 flex items-center justify-center cursor-pointer">
-            <span className="text-sm font-semibold">U</span>
-          </div>
+          < Profiles />
         </div>
       </div>
     </header>
