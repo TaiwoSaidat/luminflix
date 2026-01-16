@@ -39,12 +39,16 @@ const MovieInfo: React.FC<MovieInfoProps> = ({ movie, onClose }) => {
             </p>
           </div> */}
           <div className="flex items-center gap-3 text-sm">
-            <span className="text-green-500 font-semibold">98% Match</span>
+            {/* <span className="text-green-500 font-semibold">98% Match</span> */}
             <span>{movie.year}</span>
+
+            <span>{movie.duration}</span>
             <span className="border border-gray-400 px-1.5 py-0.5">
               {movie.rating}
             </span>
-            <span>{movie.duration}</span>
+            <span className="border border-gray-400 px-1.5 py-0.5">
+              {movie.genre}
+            </span>
           </div>
         </div>
       </div>
