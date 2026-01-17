@@ -14,6 +14,9 @@ const MOCK_MOVIES: Movie[] = [
     rating: "PG-13",
     year: 2024,
     duration: "2h 18m",
+    triggers: ["Violence", "Mild Language"],
+    cast: ["Actor A", "Actor B", "Actor C"],
+    genres: ["Adventure", "Drama", "Sci-Fi"],
   },
   {
     id: 2,
@@ -28,6 +31,9 @@ const MOCK_MOVIES: Movie[] = [
     rating: "R",
     year: 2023,
     duration: "1h 52m",
+    triggers: ["Strong Language", "Violence"],
+    cast: ["Actor D", "Actor E", "Actor F"],
+    genres: ["Crime", "Drama", "Thriller"],
   },
   {
     id: 3,
@@ -42,6 +48,9 @@ const MOCK_MOVIES: Movie[] = [
     rating: "PG",
     year: 2024,
     duration: "2h 5m",
+    triggers: ["Emotional Themes"],
+    cast: ["Actor G", "Actor H", "Actor I"],
+    genres: ["Drama", "Romance"],
   },
   {
     id: 4,
@@ -56,6 +65,9 @@ const MOCK_MOVIES: Movie[] = [
     rating: "R",
     year: 2024,
     duration: "2h 30m",
+    triggers: ["Violence", "Strong Language", "Drug Use"],
+    cast: ["Actor J", "Actor K", "Actor L"],
+    genres: ["Action", "Sci-Fi", "Thriller"],
   },
   {
     id: 5,
@@ -70,6 +82,9 @@ const MOCK_MOVIES: Movie[] = [
     rating: "PG",
     year: 2023,
     duration: "1h 45m",
+    triggers: ["Mild Danger"],
+    cast: ["Narrator A"],
+    genres: ["Adventure", "Documentary"],
   },
   {
     id: 6,
@@ -84,7 +99,9 @@ const MOCK_MOVIES: Movie[] = [
     rating: "PG-13",
     year: 2024,
     duration: "1h 38m",
+    triggers: ["Mild Language", "Romantic Themes"],
+    cast: ["Actor M", "Actor N"],
+    genres: ["Romance", "Comedy"],
   },
 ];
 export default MOCK_MOVIES;
-

@@ -2,6 +2,8 @@ import { useState } from "react";
 import React from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { profiles } from "@/data/mockProfiles";
+import Image from "next/image";
+import green from "@/assets/profileGreen.png";
 
 export default function Profiles() {
   const [open, setOpen] = useState(false);
@@ -14,7 +16,9 @@ export default function Profiles() {
         className="flex gap-1 items-center cursor-pointer"
       >
         <div className="w-8 h-8 rounded bg-linear-to-br from-red-600 to-red-700 flex items-center justify-center">
-          <span className="text-sm font-semibold">U</span>
+          <span className="text-sm font-semibold">
+            <Image src={green} alt="profile" className="w-6 h-6 rounded-md" />
+          </span>
         </div>
         <ChevronDown
           className={`w-4 h-4 mt-1 transition ${open ? "rotate-180" : ""}`}

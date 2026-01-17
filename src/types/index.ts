@@ -9,6 +9,9 @@ export interface Movie {
   year: number;
   duration: string;
   videoUrl?: string;
+  triggers?: string[];
+  cast?: string[];
+  genres?: string[];
 }
 
 export interface Category {
