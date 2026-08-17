@@ -49,7 +49,7 @@ const ContentRow: React.FC<{ title: string; movies: Movie[] }> = ({
 
         <div
           ref={scrollRef}
-          className="flex gap-2 overflow-x-scroll scrollbar-hide scroll-smooth"
+          className="flex gap-2 overflow-x-scroll no-scrollbar scroll-smooth"
         >
           {movies.map((movie) => (
             <VideoCard key={movie.id} movie={movie} />

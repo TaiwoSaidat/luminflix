@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { cn } from "@/data/mockCategories";
+import { cn } from "@/lib/utils";
 import Logo from "../shared/logo";
 import { Search, Bell, X } from "lucide-react";
 import Profiles from "../headerComponents/Profiles";

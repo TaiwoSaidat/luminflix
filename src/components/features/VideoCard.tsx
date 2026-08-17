@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Movie } from "@/types";
+import Image from "next/image";
 import Button from "../ui/Button";
 import { Play, Plus, ThumbsUp } from "lucide-react";
 
@@ -13,11 +14,13 @@ const VideoCard: React.FC<{ movie: Movie }> = ({ movie }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative overflow-hidden rounded-md">
-        <img
+      <div className="relative aspect-2/3 overflow-hidden rounded-md">
+        <Image
           src={movie.thumbnail}
           alt={movie.title}
-          className="w-full aspect-2/3 object-cover transition-transform duration-300 group-hover:scale-110"
+          fill
+          sizes="(max-width: 768px) 200px, 280px"
+          className="object-cover transition-transform duration-300 group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-linear-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>

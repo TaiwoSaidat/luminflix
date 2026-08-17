@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# agent instructions & plans (not committed)
+CLAUDE.md
+CLAUDE.local.md
+AGENT.md
+AGENTS.md
+/plan 

@@ -24,11 +24,13 @@ const MovieInfo: React.FC<MovieInfoProps> = ({ movie, onClose }) => {
           >
             ✕
           </button>
-          <div className="">
-            <img
+          <div className="relative aspect-video w-full overflow-hidden rounded-t-xl">
+            <Image
               src={movie.backdrop}
               alt={movie.title}
-              className="w-full h-full object-cover"
+              fill
+              sizes="(max-width: 768px) 100vw, 576px"
+              className="object-cover"
             />
           </div>
           <div className="flex px-6 py-4  flex-col gap-4">
@@ -43,7 +45,7 @@ const MovieInfo: React.FC<MovieInfoProps> = ({ movie, onClose }) => {
                     HD
                   </span>
                   <span className="border border-gray-400 px-1.5 py-0.5">
-                    {movie.genre}
+                    {movie.genres[0]}
                   </span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
@@ -63,7 +65,7 @@ const MovieInfo: React.FC<MovieInfoProps> = ({ movie, onClose }) => {
                   <span className="text-[#9C949B] capitalize mt-4">
                     genres:
                   </span>
-                  <span className="text-sm">{movie.genres?.join(", ")}</span>
+                  <span className="text-sm">{movie.genres.join(", ")}</span>
                 </div>
               </div>
             </div>

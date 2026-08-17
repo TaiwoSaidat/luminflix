@@ -4,14 +4,13 @@ export interface Movie {
   description: string;
   thumbnail: string;
   backdrop: string;
-  genre: string;
+  genres: string[];
   rating: string;
   year: number;
   duration: string;
   videoUrl?: string;
   triggers?: string[];
   cast?: string[];
-  genres?: string[];
 }
 
 export interface Category {

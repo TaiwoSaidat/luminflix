@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "@/data/mockCategories";
+import { cn } from "@/lib/utils";
 
 
 interface ButtonProps {

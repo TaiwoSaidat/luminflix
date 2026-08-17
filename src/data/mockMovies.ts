@@ -10,7 +10,6 @@ const MOCK_MOVIES: Movie[] = [
       "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=400&h=600&fit=crop",
     backdrop:
       "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=1920&h=1080&fit=crop",
-    genre: "Sci-Fi",
     rating: "PG-13",
     year: 2024,
     duration: "2h 18m",
@@ -27,7 +26,6 @@ const MOCK_MOVIES: Movie[] = [
       "https://images.unsplash.com/photo-1509347528160-9a9e33742cdb?w=400&h=600&fit=crop",
     backdrop:
       "https://images.unsplash.com/photo-1509347528160-9a9e33742cdb?w=1920&h=1080&fit=crop",
-    genre: "Thriller",
     rating: "R",
     year: 2023,
     duration: "1h 52m",
@@ -44,7 +42,6 @@ const MOCK_MOVIES: Movie[] = [
       "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=600&fit=crop",
     backdrop:
       "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1920&h=1080&fit=crop",
-    genre: "Drama",
     rating: "PG",
     year: 2024,
     duration: "2h 5m",
@@ -61,7 +58,6 @@ const MOCK_MOVIES: Movie[] = [
       "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&h=600&fit=crop",
     backdrop:
       "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1920&h=1080&fit=crop",
-    genre: "Action",
     rating: "R",
     year: 2024,
     duration: "2h 30m",
@@ -78,7 +74,6 @@ const MOCK_MOVIES: Movie[] = [
       "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=600&fit=crop",
     backdrop:
       "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop",
-    genre: "Documentary",
     rating: "PG",
     year: 2023,
     duration: "1h 45m",
@@ -95,7 +90,6 @@ const MOCK_MOVIES: Movie[] = [
       "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=400&h=600&fit=crop",
     backdrop:
       "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1920&h=1080&fit=crop",
-    genre: "Romance",
     rating: "PG-13",
     year: 2024,
     duration: "1h 38m",

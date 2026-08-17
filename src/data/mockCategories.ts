@@ -1,4 +1,3 @@
-import { Movie } from "@/types";
 import MOCK_MOVIES from "./mockMovies";
 
 const CATEGORIES = [
@@ -9,7 +8,3 @@ const CATEGORIES = [
 ];
 
 export default CATEGORIES;
-
-export const cn = (...classes: (string | boolean | undefined)[]) => {
-  return classes.filter(Boolean).join(" ");
-};

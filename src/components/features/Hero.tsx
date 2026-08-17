@@ -3,13 +3,11 @@
 import { Movie } from "@/types";
 import { Play, Info, Volume2, VolumeX } from "lucide-react";
 import { useState } from "react";
+import Image from "next/image";
 import Button from "../ui/Button";
 
 import React from "react";
-// import movieInfo from "../heroComponents/movieInfo";
-// import MovieInfo from "../heroComponents/movieInfo";
-import MovieInfo from "../heroComponents/movieInfo";
-
+import MovieInfo from "../heroComponents/MovieInfo";
 
 const Hero: React.FC<{ movie: Movie }> = ({ movie }) => {
   const [muted, setMuted] = useState(true);
@@ -18,10 +16,13 @@ const Hero: React.FC<{ movie: Movie }> = ({ movie }) => {
   return (
     <div className="relative h-screen w-full">
       <div className="absolute inset-0">
-        <img
+        <Image
           src={movie.backdrop}
           alt={movie.title}
-          className="w-full h-full object-cover"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
         />
         <div className="absolute inset-0 bg-linear-to-r from-black via-black/50 to-transparent" />
         <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-transparent" />
