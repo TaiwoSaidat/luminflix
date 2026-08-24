@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "images.unsplash.com",
+        hostname: "image.tmdb.org",
       },
     ],
     formats: ["image/avif", "image/webp"],
