@@ -1,9 +1,10 @@
 import { useState } from "react";
 import React from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { profiles } from "@/data/mockProfiles";
 import Image from "next/image";
 import green from "@/assets/profileGreen.png";
+
 
 export default function Profiles() {
   const [open, setOpen] = useState(false);
@@ -33,9 +34,11 @@ export default function Profiles() {
               key={profile.id}
               className="flex items-center gap-3 w-full px-3 py-2 hover:bg-zinc-800 transition"
             >
-              <img
+              <Image
                 src={profile.avatar}
                 alt={profile.name}
+                width={32}
+                height={32}
                 className="w-8 h-8 rounded-md object-cover"
               />
               <span className="text-xs">{profile.name}</span>

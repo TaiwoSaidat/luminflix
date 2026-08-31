@@ -1,28 +1,34 @@
 "use client";
 
-import { Movie } from "@/types";
+import { MediaItem } from "@/types";
 import { Play, Info, Volume2, VolumeX } from "lucide-react";
 import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import Button from "../ui/Button";
 
 import React from "react";
-// import movieInfo from "../heroComponents/movieInfo";
-// import MovieInfo from "../heroComponents/movieInfo";
-import MovieInfo from "../heroComponents/movieInfo";
+import MovieInfo from "../heroComponents/MovieInfo";
 
-
-const Hero: React.FC<{ movie: Movie }> = ({ movie }) => {
+const Hero: React.FC<{ movie: MediaItem }> = ({ movie }) => {
   const [muted, setMuted] = useState(true);
   const [open, setOpen] = useState(false);
 
   return (
     <div className="relative h-screen w-full">
       <div className="absolute inset-0">
-        <img
-          src={movie.backdrop}
-          alt={movie.title}
-          className="w-full h-full object-cover"
-        />
+        {movie.backdrop ? (
+          <Image
+            src={movie.backdrop}
+            alt={movie.title}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+        ) : (
+          <div className="w-full h-full bg-zinc-900" />
+        )}
         <div className="absolute inset-0 bg-linear-to-r from-black via-black/50 to-transparent" />
         <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-transparent" />
       </div>
@@ -42,23 +48,19 @@ const Hero: React.FC<{ movie: Movie }> = ({ movie }) => {
           </div>
 
           <p className="text-lg md:text-xl text-gray-200 max-w-xl line-clamp-3">
-            {movie.description}
+            {movie.overview}
           </p>
           <div className="flex gap-3 pt-4">
-            <Button
-              variant="primary"
-              size="lg"
-              icon={<Play className="w-6 h-6 fill-current" />}
-            >
-              Play
-            </Button>
-            {/* <Button
-              variant="secondary"
-              size="lg"
-              icon={<Info className="w-6 h-6" />}
-            >
-              More Info
-            </Button> */}
+            <Link href={`/watch/${movie.mediaType}/${movie.id}`}>
+              <Button
+                variant="primary"
+                size="lg"
+                icon={<Play className="w-6 h-6 fill-current" />}
+              >
+                Play
+              </Button>
+            </Link>
+
             <Button
               variant="secondary"
               size="lg"
@@ -75,6 +77,7 @@ const Hero: React.FC<{ movie: Movie }> = ({ movie }) => {
 
       <button
         onClick={() => setMuted(!muted)}
+        aria-label={muted ? "Unmute preview" : "Mute preview"}
         className="absolute bottom-32 top right-8 p-2 rounded-full border-2 border-white/60 bg-black/30 hover:bg-black/50 transition"
       >
         {muted ? (

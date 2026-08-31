@@ -1,68 +1,27 @@
-"use client";
-import React from "react";
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import Hero from "@/components/features/Hero";
-import MOCK_MOVIES from "@/data/mockMovies";
-import CATEGORIES from "@/data/mockCategories";
-import { useEffect, useState } from "react";
 import ContentRow from "@/components/features/ContentRow";
+import { getFeatured, getRows } from "@/lib/api";
 
-export default function Home() {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+export default async function Home() {
+  const [featured, rows] = await Promise.all([getFeatured(), getRows()]);
 
   return (
-    <>
-      <div className="bg-black text-white min-h-screen">
-        <Header scrolled={scrolled} />
+    <div className="bg-black text-white min-h-screen">
+      <Header />
 
-        <main>
-          <Hero movie={MOCK_MOVIES[0]} />
+      <main>
+        {featured && <Hero movie={featured} />}
 
-          <div className="relative -mt-32 space-y-12 pb-12">
-            {CATEGORIES.map((category) => (
-              <ContentRow
-                key={category.name}
-                title={category.name}
-                movies={category.movies}
-              />
-            ))}
-          </div>
-        </main>
+        <div className="relative -mt-32 space-y-12 pb-12">
+          {rows.map((row) => (
+            <ContentRow key={row.id} title={row.title} movies={row.items} />
+          ))}
+        </div>
+      </main>
 
-        <Footer />
-
-        <style jsx global>{`
-          .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-          }
-          .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-          }
-          .line-clamp-1 {
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-          }
-          .line-clamp-3 {
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-          }
-        `}</style>
-      </div>
-    </>
+      <Footer />
+    </div>
   );
 }

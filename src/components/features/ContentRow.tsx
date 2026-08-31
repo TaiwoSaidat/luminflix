@@ -1,9 +1,11 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
-import { Movie } from "@/types";
+import { MediaItem } from "@/types";
 import VideoCard from "./VideoCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const ContentRow: React.FC<{ title: string; movies: Movie[] }> = ({
+const ContentRow: React.FC<{ title: string; movies: MediaItem[] }> = ({
   title,
   movies,
 }) => {
@@ -41,6 +43,7 @@ const ContentRow: React.FC<{ title: string; movies: Movie[] }> = ({
         {canScrollLeft && (
           <button
             onClick={() => scroll("left")}
+            aria-label={`Scroll ${title} left`}
             className="absolute left-0 top-0 bottom-0 z-10 w-12 bg-black/80 flex items-center justify-center opacity-0 group-hover/row:opacity-100 transition-opacity"
           >
             <ChevronLeft className="w-8 h-8" />
@@ -49,7 +52,7 @@ const ContentRow: React.FC<{ title: string; movies: Movie[] }> = ({
 
         <div
           ref={scrollRef}
-          className="flex gap-2 overflow-x-scroll scrollbar-hide scroll-smooth"
+          className="flex gap-2 overflow-x-scroll no-scrollbar scroll-smooth"
         >
           {movies.map((movie) => (
             <VideoCard key={movie.id} movie={movie} />
@@ -59,6 +62,7 @@ const ContentRow: React.FC<{ title: string; movies: Movie[] }> = ({
         {canScrollRight && (
           <button
             onClick={() => scroll("right")}
+            aria-label={`Scroll ${title} right`}
             className="absolute right-0 top-0 bottom-0 z-10 w-12 bg-black/80 flex items-center justify-center opacity-0 group-hover/row:opacity-100 transition-opacity"
           >
             <ChevronRight className="w-8 h-8" />
