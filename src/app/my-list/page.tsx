@@ -9,7 +9,7 @@ export default function MyListPage() {
   return (
     <ComingSoon
       title="My List"
-      detail="Saved titles appear here once profiles and auth exist — this data is per-user, so it will never be cached."
+      detail="Saved titles appear here once there is somewhere to store them. Sign-in works — persistence is the remaining blocker, and this data is per-user, so it will never be cached."
     />
   );
 }

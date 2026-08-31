@@ -9,6 +9,11 @@ interface ButtonProps {
   onClick?: () => void;
   className?: string;
   icon?: React.ReactNode;
+  // Defaults to "button" so existing call sites keep behaving as they do today;
+  // the login form opts into "submit" explicitly.
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
+  "aria-label"?: string;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -18,9 +23,12 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   className,
   icon,
+  type = "button",
+  disabled = false,
+  "aria-label": ariaLabel,
 }) => {
   const baseStyles =
-    "font-semibold rounded transition-all duration-200 flex items-center gap-2 justify-center";
+    "font-semibold rounded transition-all duration-200 flex items-center gap-2 justify-center disabled:opacity-60 disabled:cursor-not-allowed";
 
   const variants = {
     primary: "bg-white text-black hover:bg-white/90",
@@ -36,7 +44,10 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
+      type={type}
       onClick={onClick}
+      disabled={disabled}
+      aria-label={ariaLabel}
       className={cn(baseStyles, variants[variant], sizes[size], className)}
     >
       {icon}

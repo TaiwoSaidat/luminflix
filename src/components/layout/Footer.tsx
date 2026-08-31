@@ -1,10 +1,16 @@
+import React from "react";
+import Link from "next/link";
 
+import { ROUTES } from "@/lib/constants";
 
 const Footer: React.FC = () => {
   return (
     <footer className="px-4 md:px-12 py-12 bg-black/50 mt-24">
       <div className="max-w-6xl space-y-8">
-        <div className="flex gap-6 text-gray-400">
+        <div className="flex flex-wrap gap-6 text-gray-400">
+          <Link href={ROUTES.ABOUT} className="hover:underline">
+            About
+          </Link>
           <a href="#" className="hover:underline">
             Audio and Subtitles
           </a>
@@ -66,7 +72,13 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        <p className="text-gray-500 text-sm">© 2024 LuminFlix, Inc.</p>
+        <p className="text-gray-500 text-sm">
+          © 2024 LuminFlix, Inc. ·{" "}
+          {/* The full TMDB attribution lives on /about; this is the link to it. */}
+          <Link href={ROUTES.ABOUT} className="hover:underline">
+            Powered by TMDB
+          </Link>
+        </p>
       </div>
     </footer>
   );
