@@ -35,7 +35,7 @@ export default function Landing() {
             <Link href={ROUTES.LOGIN}>
               <Button
                 size="sm"
-                className="bg-luminflix-red text-white hover:bg-luminflix-red/90"
+                className="bg-luminflix-red text-black hover:bg-luminflix-red/90"
               >
                 Sign In
               </Button>
@@ -56,7 +56,7 @@ export default function Landing() {
             <Link href={ROUTES.LOGIN} className="mt-8">
               <Button
                 size="lg"
-                className="bg-luminflix-red text-white hover:bg-luminflix-red/90"
+                className="bg-luminflix-red text-black hover:bg-luminflix-red/90"
               >
                 Sign In
               </Button>
