@@ -6,6 +6,9 @@ export const ROUTES = {
   SEARCH: '/search',
   WATCH: '/watch',
   MY_LIST: '/my-list',
+  LOGIN: '/login',
+  PROFILES: '/profiles',
+  ABOUT: '/about',
 } as const;
 
 export const MOVIE_GENRES = [
