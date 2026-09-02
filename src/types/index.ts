@@ -20,6 +20,13 @@ export interface MediaItem {
   /** Full CDN URLs, already sized — null when TMDB has no artwork on file. */
   poster: string | null;
   backdrop: string | null;
+  /**
+   * The title treatment — the show/film's name as artwork, drawn over the
+   * backdrop on cards and the hero. Backdrops are textless plates, so without
+   * this a landscape card shows no name at all. Null when the provider has no
+   * English logo on file; callers fall back to rendering `title` as text.
+   */
+  logo: string | null;
   /** Release year, or null for unreleased/undated titles. */
   year: number | null;
   genres: string[];

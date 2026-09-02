@@ -7,6 +7,7 @@ import type {
   MediaItemResponse,
   MediaListResponse,
   MovieResponse,
+  ImagesResponse,
 } from "@/types/media";
 
 const BASE_URL = process.env.MEDIA_API_URL ?? "https://api.themoviedb.org/3";
@@ -71,6 +72,41 @@ function imageUrl(path: string | null, size: string): string | null {
   return path ? `${IMAGE_URL}/${size}${path}` : null;
 }
 
+/**
+ * PNG is preferred over SVG: SVG logos would need `images.dangerouslyAllowSVG`
+ * in next.config to render through `next/image`, which isn't worth switching on
+ * for provider-hosted artwork. Falls back to whatever is on file if no PNG.
+ */
+function pickLogo(images?: ImagesResponse): string | null {
+  const logos = images?.logos ?? [];
+  const best =
+    logos.find((logo) => logo.file_path.toLowerCase().endsWith(".png")) ??
+    logos[0];
+  return imageUrl(best?.file_path ?? null, "w500");
+}
+
+/**
+ * Title logos come from a per-title endpoint, so a row of 20 costs 20 requests.
+ * They're immutable once published, hence the long TTL — after the first render
+ * these are served from the data cache. A failure here is non-fatal: the card
+ * falls back to text, so one bad response must not take down a whole row.
+ */
+async function getLogo(mediaType: MediaType, id: number): Promise<string | null> {
+  try {
+    const images = await fetchMedia<ImagesResponse>(
+      `/${mediaType}/${id}/images`,
+      {
+        cache: { revalidate: DETAIL_TTL },
+        // `null` keeps textless-language logos, which are usually the English one.
+        params: { include_image_language: "en,null" },
+      }
+    );
+    return pickLogo(images);
+  } catch {
+    return null;
+  }
+}
+
 function yearOf(date?: string): number | null {
   if (!date) return null;
   const year = Number.parseInt(date.slice(0, 4), 10);
@@ -97,6 +133,9 @@ function mapListItem(
     overview: item.overview,
     poster: imageUrl(item.poster_path, "w500"),
     backdrop: imageUrl(item.backdrop_path, "w1280"),
+    // List endpoints carry no artwork beyond poster/backdrop; `getList` fills
+    // this in with a second, separately-cached request per title.
+    logo: null,
     year: yearOf(isMovie(item) ? item.release_date : item.first_air_date),
     genres: (item.genre_ids ?? [])
       .map((id) => genreNames.get(id))
@@ -129,6 +168,7 @@ function mapDetail(detail: MediaDetailResponse, mediaType: MediaType): MediaItem
     overview: detail.overview,
     poster: imageUrl(detail.poster_path, "w500"),
     backdrop: imageUrl(detail.backdrop_path, "original"),
+    logo: pickLogo(detail.images),
     year: yearOf(detail.release_date ?? detail.first_air_date),
     genres: (detail.genres ?? []).map((genre) => genre.name),
     matchScore: Math.round(detail.vote_average * 10),
@@ -174,7 +214,12 @@ async function getList(
     getGenreMap(mediaType),
   ]);
 
-  return data.results.map((item) => mapListItem(item, mediaType, genreNames));
+  return Promise.all(
+    data.results.map(async (item) => ({
+      ...mapListItem(item, mediaType, genreNames),
+      logo: await getLogo(mediaType, item.id),
+    }))
+  );
 }
 
 const ROW_DEFINITIONS = [
@@ -245,8 +290,9 @@ export async function getById(
     params: {
       append_to_response:
         mediaType === "movie"
-          ? "credits,release_dates,videos"
-          : "credits,content_ratings,videos",
+          ? "credits,release_dates,videos,images"
+          : "credits,content_ratings,videos,images",
+      include_image_language: "en,null",
     },
   });
 
