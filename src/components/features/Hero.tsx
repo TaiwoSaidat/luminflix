@@ -1,7 +1,7 @@
 "use client";
 
 import { MediaItem } from "@/types";
-import { Play, Info, Volume2, VolumeX } from "lucide-react";
+import { Play, Volume2, VolumeX } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -55,6 +55,7 @@ const Hero: React.FC<{ movie: MediaItem }> = ({ movie }) => {
               <Button
                 variant="primary"
                 size="lg"
+                shape="pill"
                 icon={<Play className="w-6 h-6 fill-current" />}
               >
                 Play
@@ -64,7 +65,7 @@ const Hero: React.FC<{ movie: MediaItem }> = ({ movie }) => {
             <Button
               variant="secondary"
               size="lg"
-              icon={<Info className="w-6 h-6" />}
+              shape="pill"
               onClick={() => setOpen(true)}
             >
               More Info

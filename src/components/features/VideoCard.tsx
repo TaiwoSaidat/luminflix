@@ -6,7 +6,7 @@ import { MediaItem } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 import PreviewCard, { PreviewRect } from "./PreviewCard";
-import MovieInfo from "../heroComponents/MovieInfo";
+import TitleModal from "./TitleModal";
 
 interface VideoCardProps {
   movie: MediaItem;
@@ -199,7 +199,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ movie, progress }) => {
         )}
 
       {detailsOpen && (
-        <MovieInfo movie={movie} onClose={() => setDetailsOpen(false)} />
+        <TitleModal movie={movie} onClose={() => setDetailsOpen(false)} />
       )}
     </div>
   );

@@ -203,7 +203,9 @@ export async function getGenres(mediaType: MediaType): Promise<GenreResponse[]> 
 async function getList(
   path: string,
   mediaType: MediaType,
-  params?: Record<string, string>
+  params?: Record<string, string>,
+  /** Trims the page before the per-title logo fetches, which cost one request each. */
+  limit?: number
 ): Promise<MediaItem[]> {
   // Genre list is fetched alongside, not after — it's a separate cached request.
   const [data, genreNames] = await Promise.all([
@@ -214,8 +216,10 @@ async function getList(
     getGenreMap(mediaType),
   ]);
 
+  const results = limit ? data.results.slice(0, limit) : data.results;
+
   return Promise.all(
-    data.results.map(async (item) => ({
+    results.map(async (item) => ({
       ...mapListItem(item, mediaType, genreNames),
       logo: await getLogo(mediaType, item.id),
     }))
@@ -297,6 +301,30 @@ export async function getById(
   });
 
   return mapDetail(detail, mediaType);
+}
+
+/**
+ * "More Like This" on the title detail modal.
+ *
+ * Non-fatal by design: the modal is still worth showing without its
+ * recommendation grid, so a provider failure here resolves to an empty list
+ * rather than taking the whole modal down.
+ */
+export async function getRecommendations(
+  mediaType: MediaType,
+  id: number,
+  limit = 9
+): Promise<MediaItem[]> {
+  try {
+    return await getList(
+      `/${mediaType}/${id}/recommendations`,
+      mediaType,
+      undefined,
+      limit
+    );
+  } catch {
+    return [];
+  }
 }
 
 export async function getByGenre(

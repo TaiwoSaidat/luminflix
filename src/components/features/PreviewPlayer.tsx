@@ -3,18 +3,37 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { MediaItem } from "@/types";
+import { cn } from "@/lib/utils";
+
+interface PreviewPlayerProps {
+  movie: MediaItem;
+  /** Sizes hint for the artwork — the modal renders far wider than a preview. */
+  sizes?: string;
+  /** Overrides the title-treatment box, which is larger in the modal. */
+  logoClassName?: string;
+  /** Controls drawn under the title treatment, inside the media area. */
+  children?: React.ReactNode;
+  priority?: boolean;
+}
 
 /**
- * The media area of the hover preview — a placeholder for the trailer player.
+ * The media area shared by the hover preview and the title detail modal — a
+ * placeholder for the trailer player.
  *
  * Netflix autoplays a muted trailer here. That player doesn't exist yet (see
- * `plan/phase-2-routes.md` §1.3), so this renders the title's backdrop at
- * preview width instead, over a pulsing skeleton that shows until the image
- * decodes. When the player lands, swap the <Image> for the trailer element and
- * keep everything else: the aspect box, the skeleton (it becomes the buffering
- * state), the scrim and the title treatment all still apply.
+ * `plan/phase-2-routes.md` §1.3), so this renders the title's backdrop instead,
+ * over a pulsing skeleton that shows until the image decodes. When the player
+ * lands, swap the <Image> for the trailer element and keep everything else: the
+ * aspect box, the skeleton (it becomes the buffering state), the scrim, the
+ * title treatment and the overlaid controls all still apply.
  */
-const PreviewPlayer: React.FC<{ movie: MediaItem }> = ({ movie }) => {
+const PreviewPlayer: React.FC<PreviewPlayerProps> = ({
+  movie,
+  sizes = "(max-width: 768px) 90vw, 480px",
+  logoClassName = "h-10 w-2/3",
+  children,
+  priority = false,
+}) => {
   const [loaded, setLoaded] = useState(false);
 
   // Backdrops are 16:9 and textless; a poster is 2:3, so it is contained
@@ -36,7 +55,8 @@ const PreviewPlayer: React.FC<{ movie: MediaItem }> = ({ movie }) => {
           src={artwork}
           alt={movie.title}
           fill
-          sizes="(max-width: 768px) 90vw, 480px"
+          sizes={sizes}
+          priority={priority}
           onLoad={() => setLoaded(true)}
           className={isPosterFallback ? "object-contain" : "object-cover"}
         />
@@ -50,23 +70,27 @@ const PreviewPlayer: React.FC<{ movie: MediaItem }> = ({ movie }) => {
 
       {/* Scrim under the title treatment — backdrops are busy and a logo
           dropped straight onto one is often unreadable. */}
-      <div className="absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-black/85 via-black/35 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-black/90 via-black/40 to-transparent" />
 
-      {movie.logo ? (
-        <div className="absolute bottom-4 left-4 right-4 h-10">
-          <Image
-            src={movie.logo}
-            alt={movie.title}
-            fill
-            sizes="(max-width: 768px) 90vw, 480px"
-            className="object-contain object-left-bottom drop-shadow-md"
-          />
-        </div>
-      ) : (
-        <h3 className="absolute bottom-4 left-4 right-4 regular-16 font-semibold line-clamp-2 drop-shadow-md">
-          {movie.title}
-        </h3>
-      )}
+      <div className="absolute inset-x-0 bottom-0 space-y-4 p-4 md:p-6">
+        {movie.logo ? (
+          <div className={cn("relative", logoClassName)}>
+            <Image
+              src={movie.logo}
+              alt={movie.title}
+              fill
+              sizes={sizes}
+              className="object-contain object-left-bottom drop-shadow-md"
+            />
+          </div>
+        ) : (
+          <h3 className="regular-16 font-semibold line-clamp-2 drop-shadow-md">
+            {movie.title}
+          </h3>
+        )}
+
+        {children}
+      </div>
     </div>
   );
 };
