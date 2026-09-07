@@ -45,6 +45,17 @@ export interface GenreResponse {
   name: string;
 }
 
+/** One entry from an /images response. */
+export interface ImageResponse {
+  file_path: string;
+  iso_639_1: string | null;
+  vote_average: number;
+}
+
+export interface ImagesResponse {
+  logos?: ImageResponse[];
+}
+
 /** Detail endpoints return full genre objects rather than `genre_ids`. */
 export interface MediaDetailResponse extends Omit<MediaResponseBase, "genre_ids"> {
   title?: string;
@@ -71,4 +82,5 @@ export interface MediaDetailResponse extends Omit<MediaResponseBase, "genre_ids"
   videos?: {
     results?: { site: string; type: string; key: string }[];
   };
+  images?: ImagesResponse;
 }

@@ -1,11 +1,12 @@
 "use client";
 
 import { MediaItem } from "@/types";
-import { Play, Info, Volume2, VolumeX } from "lucide-react";
+import { Play, Volume2, VolumeX } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Button from "../ui/Button";
+import IconButton from "../ui/IconButton";
 
 import React from "react";
 import MovieInfo from "../heroComponents/MovieInfo";
@@ -55,6 +56,7 @@ const Hero: React.FC<{ movie: MediaItem }> = ({ movie }) => {
               <Button
                 variant="primary"
                 size="lg"
+                shape="pill"
                 icon={<Play className="w-6 h-6 fill-current" />}
               >
                 Play
@@ -64,7 +66,7 @@ const Hero: React.FC<{ movie: MediaItem }> = ({ movie }) => {
             <Button
               variant="secondary"
               size="lg"
-              icon={<Info className="w-6 h-6" />}
+              shape="pill"
               onClick={() => setOpen(true)}
             >
               More Info
@@ -75,17 +77,13 @@ const Hero: React.FC<{ movie: MediaItem }> = ({ movie }) => {
         </div>
       </div>
 
-      <button
+      <IconButton
+        icon={muted ? VolumeX : Volume2}
+        size="lg"
         onClick={() => setMuted(!muted)}
-        aria-label={muted ? "Unmute preview" : "Mute preview"}
-        className="absolute bottom-32 top right-8 p-2 rounded-full border-2 border-white/60 bg-black/30 hover:bg-black/50 transition"
-      >
-        {muted ? (
-          <VolumeX className="w-5 h-5" />
-        ) : (
-          <Volume2 className="w-5 h-5" />
-        )}
-      </button>
+        label={muted ? "Unmute preview" : "Mute preview"}
+        className="absolute bottom-32 right-8 bg-black/30"
+      />
     </div>
   );
 };

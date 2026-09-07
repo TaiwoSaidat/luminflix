@@ -6,6 +6,8 @@ interface ButtonProps {
   children: React.ReactNode;
   variant?: "primary" | "secondary" | "ghost";
   size?: "sm" | "md" | "lg";
+  /** "pill" is the fully-rounded hero treatment; everything else stays square. */
+  shape?: "default" | "pill";
   onClick?: () => void;
   className?: string;
   icon?: React.ReactNode;
@@ -20,6 +22,7 @@ const Button: React.FC<ButtonProps> = ({
   children,
   variant = "primary",
   size = "md",
+  shape = "default",
   onClick,
   className,
   icon,
@@ -28,7 +31,12 @@ const Button: React.FC<ButtonProps> = ({
   "aria-label": ariaLabel,
 }) => {
   const baseStyles =
-    "font-semibold rounded transition-all duration-200 flex items-center gap-2 justify-center disabled:opacity-60 disabled:cursor-not-allowed";
+    "font-semibold transition-all duration-200 flex items-center gap-2 justify-center disabled:opacity-60 disabled:cursor-not-allowed";
+
+  const shapes = {
+    default: "rounded",
+    pill: "rounded-full",
+  };
 
   const variants = {
     primary: "bg-white text-black hover:bg-white/90",
@@ -48,7 +56,13 @@ const Button: React.FC<ButtonProps> = ({
       onClick={onClick}
       disabled={disabled}
       aria-label={ariaLabel}
-      className={cn(baseStyles, variants[variant], sizes[size], className)}
+      className={cn(
+        baseStyles,
+        variants[variant],
+        sizes[size],
+        shapes[shape],
+        className
+      )}
     >
       {icon}
       {children}
