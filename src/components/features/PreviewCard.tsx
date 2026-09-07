@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import { ChevronDown, Play, Plus, ThumbsUp } from "lucide-react";
 import { MediaItem } from "@/types";
 import PreviewPlayer from "./PreviewPlayer";
-import { formatDuration } from "@/lib/utils";
+import TitleBadges from "../shared/TitleBadges";
+import IconButton from "../ui/IconButton";
 
 export type PreviewRect = {
   /** Viewport coordinates — the popup is fixed-positioned, not in flow. */
@@ -56,59 +56,38 @@ const PreviewCard: React.FC<PreviewCardProps> = ({
       <div className="space-y-3 p-4">
         <div className="flexBetween">
           <div className="flex items-center gap-2">
-            <Link
+            <IconButton
+              icon={Play}
+              iconClassName="fill-current"
+              variant="solid"
               href={watchHref}
-              aria-label={`Play ${movie.title}`}
-              className="flexCenter h-9 w-9 rounded-full bg-white text-black transition hover:bg-white/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-            >
-              <Play className="h-4 w-4 fill-current" />
-            </Link>
+              label={`Play ${movie.title}`}
+            />
 
             {/* My List and ratings have no backing store yet — shown as
                 disabled rather than as live controls that do nothing. */}
-            <button
-              type="button"
+            <IconButton
+              icon={Plus}
               disabled
               title="My List is not available yet"
-              aria-label={`Add ${movie.title} to My List`}
-              className="flexCenter h-9 w-9 rounded-full border border-white/40 text-white/50 disabled:cursor-not-allowed"
-            >
-              <Plus className="h-4 w-4" />
-            </button>
-            <button
-              type="button"
+              label={`Add ${movie.title} to My List`}
+            />
+            <IconButton
+              icon={ThumbsUp}
               disabled
               title="Ratings are not available yet"
-              aria-label={`Rate ${movie.title}`}
-              className="flexCenter h-9 w-9 rounded-full border border-white/40 text-white/50 disabled:cursor-not-allowed"
-            >
-              <ThumbsUp className="h-4 w-4" />
-            </button>
+              label={`Rate ${movie.title}`}
+            />
           </div>
 
-          <button
-            type="button"
+          <IconButton
+            icon={ChevronDown}
             onClick={onOpenDetails}
-            aria-label={`More information about ${movie.title}`}
-            className="flexCenter h-9 w-9 rounded-full border border-white/40 transition hover:border-white hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-          >
-            <ChevronDown className="h-4 w-4" />
-          </button>
+            label={`More information about ${movie.title}`}
+          />
         </div>
 
-        <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 small-12">
-          {movie.certification && (
-            <span className="border border-white/40 px-1.5 py-0.5">
-              {movie.certification}
-            </span>
-          )}
-          <span className="font-semibold text-green-500">
-            {movie.matchScore}% Match
-          </span>
-          {movie.runtime && <span>{formatDuration(movie.runtime)}</span>}
-          {movie.year && <span>{movie.year}</span>}
-          <span className="border border-white/40 px-1.5 py-0.5">HD</span>
-        </div>
+        <TitleBadges media={movie} />
 
         {movie.genres.length > 0 && (
           <ul className="flex flex-wrap items-center gap-x-2 gap-y-1 regular-12">

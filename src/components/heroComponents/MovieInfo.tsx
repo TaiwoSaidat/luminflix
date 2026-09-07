@@ -1,7 +1,9 @@
 import React from "react";
 import { MediaItem } from "@/types";
 import Image from "next/image";
-import { formatDuration } from "@/lib/utils";
+import { X } from "lucide-react";
+import TitleBadges from "../shared/TitleBadges";
+import IconButton from "../ui/IconButton";
 
 type MovieInfoProps = {
   movie: MediaItem;
@@ -24,14 +26,13 @@ const MovieInfo: React.FC<MovieInfoProps> = ({ movie, onClose }) => {
           className="bg-zinc-900 rounded-xl max-w-xl w-full relative"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Close button */}
-          <button
+          <IconButton
+            icon={X}
+            variant="overlay"
             onClick={onClose}
-            aria-label="Close details"
-            className="absolute top-4 right-4 z-10 text-zinc-400 hover:text-white"
-          >
-            ✕
-          </button>
+            label="Close details"
+            className="absolute top-4 right-4 z-10"
+          />
           <div className="relative aspect-video w-full overflow-hidden rounded-t-xl">
             {movie.backdrop ? (
               <Image
@@ -48,26 +49,7 @@ const MovieInfo: React.FC<MovieInfoProps> = ({ movie, onClose }) => {
           <div className="flex px-6 py-4  flex-col gap-4">
             <div className=" flex gap-2">
               <div className=" flex-3 space-y-3">
-                <div className="flex items-center gap-3 text-sm">
-                  <span className="text-green-500 font-semibold">
-                    {movie.matchScore}% Match
-                  </span>
-                  {movie.year && <span>{movie.year}</span>}
-                  {movie.runtime && <span>{formatDuration(movie.runtime)}</span>}
-                  <span className="border border-gray-400 px-1.5 py-0.5">
-                    HD
-                  </span>
-                  {movie.genres[0] && (
-                    <span className="border border-gray-400 px-1.5 py-0.5">
-                      {movie.genres[0]}
-                    </span>
-                  )}
-                </div>
-                {movie.certification && (
-                  <div className="flex items-center gap-3 text-sm">
-                    <span className="">{movie.certification}</span>
-                  </div>
-                )}
+                <TitleBadges media={movie} size="md" />
                 <div className="">
                   <p className="">{movie.overview}</p>
                 </div>

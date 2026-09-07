@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { MediaItem } from "@/types";
 import { cn } from "@/lib/utils";
+import { Skeleton } from "../shared/Skeleton";
 
 interface PreviewPlayerProps {
   movie: MediaItem;
@@ -43,12 +44,7 @@ const PreviewPlayer: React.FC<PreviewPlayerProps> = ({
 
   return (
     <div className="relative aspect-video w-full overflow-hidden bg-zinc-900">
-      {!loaded && (
-        <div
-          className="absolute inset-0 animate-pulse bg-zinc-800"
-          aria-hidden="true"
-        />
-      )}
+      {!loaded && <Skeleton radius="none" className="absolute inset-0" />}
 
       {artwork ? (
         <Image

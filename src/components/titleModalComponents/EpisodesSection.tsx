@@ -2,6 +2,7 @@
 
 import React from "react";
 import { ChevronDown } from "lucide-react";
+import { Skeleton, SkeletonText } from "../shared/Skeleton";
 
 /**
  * The Episodes block of the title detail modal.
@@ -40,11 +41,10 @@ const EpisodesSection: React.FC<{ title: string }> = ({ title }) => {
             <span className="w-6 shrink-0 text-center regular-20 text-zinc-500">
               {row}
             </span>
-            <div className="h-16 w-28 shrink-0 animate-pulse rounded bg-zinc-800" />
+            <Skeleton className="h-16 w-28 shrink-0" />
             <div className="flex-1 space-y-2">
-              <div className="h-3.5 w-1/3 animate-pulse rounded bg-zinc-800" />
-              <div className="h-3 w-full animate-pulse rounded bg-zinc-800/70" />
-              <div className="h-3 w-4/5 animate-pulse rounded bg-zinc-800/70" />
+              <Skeleton className="h-3.5 w-1/3" />
+              <SkeletonText lines={2} />
             </div>
           </li>
         ))}

@@ -6,8 +6,10 @@ import Link from "next/link";
 import { Check, Play, ThumbsUp, VolumeX, X } from "lucide-react";
 
 import { MediaItem } from "@/types";
-import { formatDuration } from "@/lib/utils";
 import { getTitleDetails } from "@/lib/actions/media";
+import { SkeletonText } from "../shared/Skeleton";
+import TitleBadges from "../shared/TitleBadges";
+import IconButton from "../ui/IconButton";
 import PreviewPlayer from "./PreviewPlayer";
 import EpisodesSection from "../titleModalComponents/EpisodesSection";
 import MoreLikeThis from "../titleModalComponents/MoreLikeThis";
@@ -32,13 +34,6 @@ const MetaList: React.FC<{ label: string; values?: string[] }> = ({
     </p>
   );
 };
-
-const MetaListSkeleton = () => (
-  <div className="space-y-2" aria-hidden="true">
-    <div className="h-3 w-2/3 animate-pulse rounded bg-zinc-800" />
-    <div className="h-3 w-full animate-pulse rounded bg-zinc-800/70" />
-  </div>
-);
 
 /**
  * The title detail modal, opened by the chevron on the hover preview.
@@ -118,15 +113,14 @@ const TitleModal: React.FC<TitleModalProps> = ({ movie, onClose }) => {
         aria-labelledby={headingId}
         className="relative mx-auto w-full max-w-4xl overflow-hidden rounded-lg bg-zinc-900 text-white shadow-2xl shadow-black/70"
       >
-        <button
+        <IconButton
           ref={closeRef}
-          type="button"
+          icon={X}
+          variant="overlay"
           onClick={onClose}
-          aria-label={`Close details for ${detail.title}`}
-          className="absolute right-4 top-4 z-10 flexCenter h-9 w-9 rounded-full bg-black/70 transition hover:bg-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-        >
-          <X className="h-5 w-5" aria-hidden="true" />
-        </button>
+          label={`Close details for ${detail.title}`}
+          className="absolute right-4 top-4 z-10"
+        />
 
         <h2 id={headingId} className="sr-only">
           {detail.title}
@@ -150,62 +144,41 @@ const TitleModal: React.FC<TitleModalProps> = ({ movie, onClose }) => {
 
               {/* My List and ratings have no backing store yet — shown as
                   disabled rather than as live controls that do nothing. */}
-              <button
-                type="button"
+              <IconButton
+                icon={Check}
+                size="lg"
                 disabled
                 title="My List is not available yet"
-                aria-label={`Add ${detail.title} to My List`}
-                className="flexCenter h-10 w-10 rounded-full border-2 border-white/40 text-white/50 disabled:cursor-not-allowed"
-              >
-                <Check className="h-5 w-5" />
-              </button>
-              <button
-                type="button"
+                label={`Add ${detail.title} to My List`}
+              />
+              <IconButton
+                icon={ThumbsUp}
+                size="lg"
                 disabled
                 title="Ratings are not available yet"
-                aria-label={`Rate ${detail.title}`}
-                className="flexCenter h-10 w-10 rounded-full border-2 border-white/40 text-white/50 disabled:cursor-not-allowed"
-              >
-                <ThumbsUp className="h-5 w-5" />
-              </button>
+                label={`Rate ${detail.title}`}
+              />
             </div>
 
             {/* Audio has nothing to mute until the trailer player lands. */}
-            <button
-              type="button"
+            <IconButton
+              icon={VolumeX}
+              size="lg"
               disabled
               title="Audio arrives with the player"
-              aria-label="Toggle preview audio"
-              className="flexCenter h-10 w-10 rounded-full border-2 border-white/40 text-white/50 disabled:cursor-not-allowed"
-            >
-              <VolumeX className="h-5 w-5" />
-            </button>
+              label="Toggle preview audio"
+            />
           </div>
         </PreviewPlayer>
 
         <div className="space-y-10 px-6 py-6 md:px-12 md:py-8">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             <div className="space-y-4 md:col-span-2">
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-2 small-14">
-                {detail.year && <span>{detail.year}</span>}
-                {detail.runtime && <span>{formatDuration(detail.runtime)}</span>}
-                <span className="border border-white/40 px-1.5 py-0.5">HD</span>
-                <span className="font-semibold text-green-500">
-                  {detail.matchScore}% Match
-                </span>
-                {detail.certification ? (
-                  <span className="border border-white/40 px-1.5 py-0.5">
-                    {detail.certification}
-                  </span>
-                ) : (
-                  pending && (
-                    <span
-                      aria-hidden="true"
-                      className="h-5 w-10 animate-pulse rounded bg-zinc-800"
-                    />
-                  )
-                )}
-              </div>
+              <TitleBadges
+                media={detail}
+                size="md"
+                pendingCertification={pending}
+              />
 
               <p className="small-16 leading-relaxed">
                 {detail.overview || "No synopsis available."}
@@ -214,7 +187,7 @@ const TitleModal: React.FC<TitleModalProps> = ({ movie, onClose }) => {
 
             <div className="space-y-3">
               {pending && !detail.cast ? (
-                <MetaListSkeleton />
+                <SkeletonText lines={2} />
               ) : (
                 <MetaList label="cast" values={detail.cast} />
               )}

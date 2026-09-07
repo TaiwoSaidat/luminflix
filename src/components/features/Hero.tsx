@@ -6,6 +6,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Button from "../ui/Button";
+import IconButton from "../ui/IconButton";
 
 import React from "react";
 import MovieInfo from "../heroComponents/MovieInfo";
@@ -76,17 +77,13 @@ const Hero: React.FC<{ movie: MediaItem }> = ({ movie }) => {
         </div>
       </div>
 
-      <button
+      <IconButton
+        icon={muted ? VolumeX : Volume2}
+        size="lg"
         onClick={() => setMuted(!muted)}
-        aria-label={muted ? "Unmute preview" : "Mute preview"}
-        className="absolute bottom-32 top right-8 p-2 rounded-full border-2 border-white/60 bg-black/30 hover:bg-black/50 transition"
-      >
-        {muted ? (
-          <VolumeX className="w-5 h-5" />
-        ) : (
-          <Volume2 className="w-5 h-5" />
-        )}
-      </button>
+        label={muted ? "Unmute preview" : "Mute preview"}
+        className="absolute bottom-32 right-8 bg-black/30"
+      />
     </div>
   );
 };

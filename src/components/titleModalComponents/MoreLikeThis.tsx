@@ -6,17 +6,19 @@ import Link from "next/link";
 import { Play, Plus } from "lucide-react";
 import { MediaItem } from "@/types";
 import { formatDuration } from "@/lib/utils";
+import { Skeleton, SkeletonText } from "../shared/Skeleton";
+import TitleBadges from "../shared/TitleBadges";
+import IconButton from "../ui/IconButton";
 
 /** Matches the grid so the pending state occupies the same space as the result. */
 const SKELETON_CARDS = [1, 2, 3, 4, 5, 6];
 
 const CardSkeleton = () => (
   <div className="overflow-hidden rounded-md bg-zinc-800">
-    <div className="aspect-video w-full animate-pulse bg-zinc-700/60" />
+    <Skeleton tone="onSurface" radius="none" className="aspect-video w-full" />
     <div className="space-y-2 p-4">
-      <div className="h-3 w-1/2 animate-pulse rounded bg-zinc-700/60" />
-      <div className="h-3 w-full animate-pulse rounded bg-zinc-700/50" />
-      <div className="h-3 w-4/5 animate-pulse rounded bg-zinc-700/50" />
+      <Skeleton tone="onSurface" className="h-3 w-1/2" />
+      <SkeletonText tone="onSurface" lines={2} />
     </div>
   </div>
 );
@@ -81,37 +83,31 @@ const MoreLikeThis: React.FC<MoreLikeThisProps> = ({ items, pending }) => {
                     </span>
 
                     <span className="absolute inset-0 flexCenter opacity-0 transition-opacity group-hover:opacity-100">
-                      <span className="flexCenter h-12 w-12 rounded-full border-2 border-white bg-black/50">
-                        <Play className="h-5 w-5 fill-current" aria-hidden="true" />
-                      </span>
+                      <IconButton
+                        icon={Play}
+                        iconClassName="fill-current"
+                        variant="overlay"
+                        size="xl"
+                        decorative
+                        label=""
+                        className="border-2 border-white bg-black/50"
+                      />
                     </span>
                   </div>
 
                   <div className="space-y-2 p-4">
                     <div className="flexBetween gap-2">
-                      <div className="flex flex-wrap items-center gap-2 small-12">
-                        {item.certification && (
-                          <span className="border border-white/40 px-1.5 py-0.5">
-                            {item.certification}
-                          </span>
-                        )}
-                        <span className="border border-white/40 px-1.5 py-0.5">
-                          HD
-                        </span>
-                        <span className="font-semibold text-green-500">
-                          {item.matchScore}% Match
-                        </span>
-                      </div>
+                      <TitleBadges media={item} />
 
-                      {/* My List has no backing store yet — shown disabled
-                          rather than as a live control that does nothing. */}
-                      <span
+                      {/* My List has no backing store yet, and this sits inside
+                          a link — a real button here would be invalid markup. */}
+                      <IconButton
+                        icon={Plus}
+                        size="sm"
+                        decorative
+                        label=""
                         title="My List is not available yet"
-                        aria-hidden="true"
-                        className="flexCenter h-8 w-8 shrink-0 rounded-full border border-white/40 text-white/40"
-                      >
-                        <Plus className="h-4 w-4" />
-                      </span>
+                      />
                     </div>
 
                     <p className="small-14 text-zinc-400 line-clamp-4">
