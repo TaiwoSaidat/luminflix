@@ -14,7 +14,7 @@ function SubmitButton() {
       type="submit"
       size="lg"
       disabled={pending}
-      className="w-full mt-2 bg-luminflix-red text-white hover:bg-luminflix-red/90"
+      className="w-full mt-2 bg-luminflix-red text- hover:bg-luminflix-red/90"
     >
       {pending ? "Signing in..." : "Sign In"}
     </Button>
