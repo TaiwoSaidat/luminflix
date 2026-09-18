@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import Chip from "@/components/shared/Chip";
 import MediaCard from "@/components/shared/MediaCard";
 import MediaGrid from "@/components/shared/MediaGrid";
 import { search } from "@/lib/api";
@@ -36,12 +36,9 @@ const Suggestions: React.FC = () => (
   <ul className="flex flex-wrap gap-2">
     {MOVIE_GENRES.map((genre) => (
       <li key={genre}>
-        <Link
-          href={`${ROUTES.SEARCH}?q=${encodeURIComponent(genre)}`}
-          className="focusRing block rounded-full border border-white/30 px-4 py-2 small-14 transition hover:border-white hover:bg-white/10"
-        >
+        <Chip href={`${ROUTES.SEARCH}?q=${encodeURIComponent(genre)}`}>
           {genre}
-        </Link>
+        </Chip>
       </li>
     ))}
   </ul>
