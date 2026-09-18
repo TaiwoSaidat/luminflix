@@ -13,10 +13,20 @@ export function formatDuration(minutes: number): string {
 export function debounce<T extends (...args: never[]) => unknown>(
   func: T,
   wait: number
-): (...args: Parameters<T>) => void {
-  let timeout: ReturnType<typeof setTimeout>;
-  return (...args: Parameters<T>) => {
+): ((...args: Parameters<T>) => void) & { cancel: () => void } {
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+
+  const debounced = (...args: Parameters<T>) => {
     clearTimeout(timeout);
     timeout = setTimeout(() => func(...args), wait);
   };
+
+  /**
+   * Drops a call that is still waiting out the delay. Needed whenever the thing
+   * that queued it goes away — closing the search field must not be undone a
+   * moment later by the keystroke that preceded it.
+   */
+  debounced.cancel = () => clearTimeout(timeout);
+
+  return debounced;
 }

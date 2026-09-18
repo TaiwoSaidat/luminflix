@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useSyncExternalStore } from "react";
+import React, { Suspense, useState, useSyncExternalStore } from "react";
 import { cn } from "@/lib/utils";
 import Logo from "../shared/logo";
-import { Search, Bell, X } from "lucide-react";
+import { Bell, Search } from "lucide-react";
 import Profiles from "../headerComponents/Profiles";
+import SearchBox from "../headerComponents/SearchBox";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { ROUTES } from "@/lib/constants";
@@ -26,7 +27,6 @@ const HeaderShell: React.FC<HeaderShellProps> = ({
   profiles,
   activeProfile,
 }) => {
-  const [showSearch, setShowSearch] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   // Owned here rather than by the page, so the page can stay a Server Component.
@@ -59,7 +59,8 @@ const HeaderShell: React.FC<HeaderShellProps> = ({
           : "bg-linear-to-b from-black/80 to-transparent"
       )}
     >
-      <div className="px-4 md:px-12 py-4 flex items-center justify-between">
+      {/* `relative` anchors the search field, which covers this row on mobile. */}
+      <div className="pageX py-4 relative flexBetween">
         <div className="flex items-center gap-8">
           <Logo />
 
@@ -109,27 +110,16 @@ const HeaderShell: React.FC<HeaderShellProps> = ({
 
         {/* RIGHT SIDE ICONS */}
         <div className="flex items-center gap-4">
-          {showSearch ? (
-            <div className="flex items-center bg-black/80 border border-white px-3 py-1">
-              <Search className="w-4 h-4 text-gray-400 mr-2" />
-              <input
-                type="text"
-                placeholder="Titles, people, genres"
-                aria-label="Search titles, people and genres"
-                className="bg-transparent text-white text-sm outline-none w-32 md:w-64"
-                autoFocus
-              />
-              <X
-                className="w-4 h-4 text-gray-400 cursor-pointer ml-2"
-                onClick={() => setShowSearch(false)}
-              />
-            </div>
-          ) : (
-            <Search
-              className="w-5 h-5 text-white cursor-pointer hover:text-gray-300 transition"
-              onClick={() => setShowSearch(true)}
-            />
-          )}
+          {/* SearchBox reads `?q=` with useSearchParams, which needs a Suspense
+              boundary so a statically-rendered route (/my-list) isn't forced
+              into client-side rendering as a whole. */}
+          <Suspense
+            fallback={
+              <Search className="h-5 w-5 text-white" aria-hidden="true" />
+            }
+          >
+            <SearchBox />
+          </Suspense>
           <Bell className="w-5 h-5 text-white cursor-pointer hover:text-gray-300 transition" />
 
           {/* Every route that renders the header is gated, so the signed-out

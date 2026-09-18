@@ -1,7 +1,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 
-type Tone = "default" | "onSurface";
+export type Tone = "default" | "onSurface";
 
 /**
  * Skeletons sit on two different grounds: the page/modal body (zinc-900) and

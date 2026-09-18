@@ -33,13 +33,13 @@ export default function Profiles({ profiles, activeProfile }: ProfilesProps) {
         aria-label={`Account menu, current profile ${activeProfile.name}`}
         className="flex gap-1 items-center cursor-pointer"
       >
-        <div className="w-8 h-8 rounded bg-linear-to-br from-red-600 to-red-700 flex items-center justify-center">
-          <Image
-            src={activeProfile.avatar}
-            alt={activeProfile.name}
-            className="w-6 h-6 rounded-md"
-          />
-        </div>
+        {/* The avatar art carries its own colour, so a tinted plate behind it
+            only fought with it — the image now stands on its own at full size. */}
+        <Image
+          src={activeProfile.avatar}
+          alt={activeProfile.name}
+          className="w-10 h-10 rounded-md object-cover"
+        />
         <ChevronDown
           className={`w-4 h-4 mt-1 transition ${open ? "rotate-180" : ""}`}
         />
