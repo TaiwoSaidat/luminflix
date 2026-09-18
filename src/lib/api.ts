@@ -144,6 +144,31 @@ function mapListItem(
   };
 }
 
+/**
+ * Maps a list that mixes both media types.
+ *
+ * `/search/multi` and `/trending/all` both return films and series jumbled
+ * together, each carrying its own `media_type`, and both also return people —
+ * dropped here so callers only ever see titles. The two genre maps are passed
+ * in because a movie genre id and a TV genre id are different vocabularies.
+ */
+function mapMixedList(
+  results: MediaItemResponse[],
+  movieGenres: Map<number, string>,
+  tvGenres: Map<number, string>
+): MediaItem[] {
+  return results
+    .filter((item) => item.media_type === "movie" || item.media_type === "tv")
+    .map((item) => {
+      const mediaType = item.media_type as MediaType;
+      return mapListItem(
+        item,
+        mediaType,
+        mediaType === "movie" ? movieGenres : tvGenres
+      );
+    });
+}
+
 /** US certification sits in a different shape for movies vs TV. */
 function certificationOf(detail: MediaDetailResponse): string | undefined {
   const movieCert = detail.release_dates?.results
@@ -200,12 +225,26 @@ export async function getGenres(mediaType: MediaType): Promise<GenreResponse[]> 
   return data.genres;
 }
 
+interface ListOptions {
+  params?: Record<string, string>;
+  /** Trims the page before the per-title logo fetches, which cost one request each. */
+  limit?: number;
+  /**
+   * Title-treatment artwork, at the cost of one request per title — a page of 20
+   * means 20 extra round trips.
+   *
+   * Only worth paying where something renders it: `VideoCard` and
+   * `PreviewPlayer` draw the logo over a backdrop, so the home rows opt in.
+   * `MediaCard` writes the title out as text instead, so every grid — browse,
+   * search, recommendations — leaves this off and the field stays null.
+   */
+  withLogos?: boolean;
+}
+
 async function getList(
   path: string,
   mediaType: MediaType,
-  params?: Record<string, string>,
-  /** Trims the page before the per-title logo fetches, which cost one request each. */
-  limit?: number
+  { params, limit, withLogos = false }: ListOptions = {}
 ): Promise<MediaItem[]> {
   // Genre list is fetched alongside, not after — it's a separate cached request.
   const [data, genreNames] = await Promise.all([
@@ -217,10 +256,15 @@ async function getList(
   ]);
 
   const results = limit ? data.results.slice(0, limit) : data.results;
+  const items = results.map((item) =>
+    mapListItem(item, mediaType, genreNames)
+  );
+
+  if (!withLogos) return items;
 
   return Promise.all(
-    results.map(async (item) => ({
-      ...mapListItem(item, mediaType, genreNames),
+    items.map(async (item) => ({
+      ...item,
       logo: await getLogo(mediaType, item.id),
     }))
   );
@@ -264,20 +308,27 @@ const ROW_DEFINITIONS = [
   mediaType: MediaType;
 }[];
 
-/** Every row on the home page, fetched in parallel. */
+/**
+ * Every row on the home page, fetched in parallel.
+ *
+ * The only caller that opts into logos: row cards draw the title treatment over
+ * the backdrop, and without it a landscape card shows no name at all.
+ */
 export async function getRows(): Promise<MediaRow[]> {
   return Promise.all(
     ROW_DEFINITIONS.map(async (row) => ({
       id: row.id,
       title: row.title,
-      items: await getList(row.path, row.mediaType),
+      items: await getList(row.path, row.mediaType, { withLogos: true }),
     }))
   );
 }
 
 /** The hero title — the top trending film, with detail fields filled in. */
 export async function getFeatured(): Promise<MediaItem | null> {
-  const trending = await getList("/trending/movie/week", "movie");
+  // Only this list's first id is used; `getById` below supplies the hero's own
+  // logo inline, so fetching logos for the whole page here would be wasted.
+  const trending = await getList("/trending/movie/week", "movie", { limit: 1 });
   const top = trending[0];
   if (!top) return null;
 
@@ -316,30 +367,57 @@ export async function getRecommendations(
   limit = 9
 ): Promise<MediaItem[]> {
   try {
-    return await getList(
-      `/${mediaType}/${id}/recommendations`,
-      mediaType,
-      undefined,
-      limit
-    );
+    return await getList(`/${mediaType}/${id}/recommendations`, mediaType, {
+      limit,
+    });
   } catch {
     return [];
   }
 }
 
-export async function getByGenre(
+/**
+ * The /browse grid.
+ *
+ * `genreId` is optional on purpose: browsing starts before a genre is picked,
+ * so the route needs a default page of titles rather than nothing to show.
+ */
+export async function getDiscover(
   mediaType: MediaType,
-  genreId: number
+  genreId?: number
 ): Promise<MediaItem[]> {
   return getList(`/discover/${mediaType}`, mediaType, {
-    with_genres: String(genreId),
-    sort_by: "popularity.desc",
+    params: {
+      sort_by: "popularity.desc",
+      ...(genreId ? { with_genres: String(genreId) } : {}),
+    },
   });
 }
 
 /**
- * Query-dependent, so never cached. `/search/multi` also returns people —
- * they're dropped here so callers only ever see titles.
+ * "New & Popular" — films and series in one ranked list.
+ *
+ * Deliberately not routed through `getList()`: that helper resolves a single
+ * genre map for the whole page, and this list carries a media type per item.
+ *
+ * Renders through `MediaCard`, which writes titles out as text, so no logos are
+ * fetched — three requests for the whole page rather than twenty-three.
+ */
+export async function getTrending(): Promise<MediaItem[]> {
+  const [data, movieGenres, tvGenres] = await Promise.all([
+    fetchMedia<MediaListResponse<MediaItemResponse>>("/trending/all/week", {
+      cache: { revalidate: CATALOG_TTL },
+    }),
+    getGenreMap("movie"),
+    getGenreMap("tv"),
+  ]);
+
+  return mapMixedList(data.results, movieGenres, tvGenres);
+}
+
+/**
+ * Query-dependent, so never cached — a cached response would be served back
+ * under a different query. No logo fetches either: a result set of 20 would
+ * cost 20 uncached requests on every keystroke that settles.
  */
 export async function search(query: string): Promise<MediaItem[]> {
   const trimmed = query.trim();
@@ -354,14 +432,5 @@ export async function search(query: string): Promise<MediaItem[]> {
     getGenreMap("tv"),
   ]);
 
-  return data.results
-    .filter((item) => item.media_type === "movie" || item.media_type === "tv")
-    .map((item) => {
-      const mediaType = item.media_type as MediaType;
-      return mapListItem(
-        item,
-        mediaType,
-        mediaType === "movie" ? movieGenres : tvGenres
-      );
-    });
+  return mapMixedList(data.results, movieGenres, tvGenres);
 }
