@@ -30,6 +30,33 @@
     @apply py-4 px-4 w-full md:w-[80%] lg:w-[80%] rounded-lg;
   }
 
+  /* The page gutter. Every full-width surface — header, rows, hero, search —
+     lines up on this, so it is defined once rather than re-typed per file. */
+  .pageX {
+    @apply px-4 md:px-12;
+  }
+
+  /* Clears the fixed header. Content that starts at the top of a page needs it;
+     the home page doesn't, because the hero deliberately sits under the header. */
+  .pageTop {
+    @apply pt-24 md:pt-28;
+  }
+
+  /* The one focus treatment for custom controls — links, buttons, the search
+     field. Keyboard users must be able to see where they are on a black UI. */
+  .focusRing {
+    @apply focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white;
+  }
+
+  /* `type="search"` is kept for the Search key it puts on mobile keyboards, but
+     WebKit also draws its own clear glyph inside the field — a second X beside
+     the one we render, and unstyleable against a dark UI. */
+  .no-searchCancel::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+    display: none;
+  }
+
   /* FONTS */
 
   .small-10 {

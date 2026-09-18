@@ -94,8 +94,7 @@ const IconButton: React.FC<IconButtonProps> = ({
     VARIANTS[variant],
     SIZES[size],
     variant === "outline" && BORDER_WIDTHS[size],
-    !decorative &&
-      "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white",
+    !decorative && "focusRing",
     disabled && "cursor-not-allowed",
     className
   );

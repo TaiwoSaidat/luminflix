@@ -136,7 +136,7 @@ const TitleModal: React.FC<TitleModalProps> = ({ movie, onClose }) => {
             <div className="flex items-center gap-3">
               <Link
                 href={watchHref}
-                className="flex items-center gap-2 rounded bg-white px-6 py-2 regular-16 font-semibold text-black transition hover:bg-white/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                className="focusRing flex items-center gap-2 rounded bg-white px-6 py-2 regular-16 font-semibold text-black transition hover:bg-white/80"
               >
                 <Play className="h-5 w-5 fill-current" aria-hidden="true" />
                 Play
