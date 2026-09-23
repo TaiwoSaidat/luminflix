@@ -5,7 +5,7 @@ import { ROUTES } from "@/lib/constants";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="px-4 md:px-12 py-12 bg-black/50 mt-24">
+    <footer className="px-4 md:px-12 py-12 bg-black/50 mt-12">
       <div className="max-w-6xl space-y-8">
         <div className="flex flex-wrap gap-6 text-gray-400">
           <Link href={ROUTES.ABOUT} className="hover:underline">

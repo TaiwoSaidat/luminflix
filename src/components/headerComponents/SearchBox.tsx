@@ -29,7 +29,16 @@ function searchHref(query: string): string {
  * and every later one `replace`s (so a five-letter word doesn't leave five
  * entries in history).
  */
-const SearchBox: React.FC = () => {
+interface SearchBoxProps {
+  /**
+   * Lets the header drop the nav while the field is open on small screens,
+   * where the field covers the whole row and the items behind it would still be
+   * tabbable. On wider screens the field simply overlaps them.
+   */
+  onOpenChange?: (open: boolean) => void;
+}
+
+const SearchBox: React.FC<SearchBoxProps> = ({ onOpenChange }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -46,6 +55,8 @@ const SearchBox: React.FC = () => {
   // Keeps the field in step with the URL when it changes from outside — a Back
   // navigation, or one of the suggestion links on the empty results page.
   useEffect(() => setValue(activeQuery), [activeQuery]);
+
+  useEffect(() => onOpenChange?.(open), [open, onOpenChange]);
 
   // Opening the field commits the user to one of two destinations: the results
   // page, or home when they close it again. Neither is a <Link>, so nothing
@@ -120,7 +131,9 @@ const SearchBox: React.FC = () => {
         }}
         aria-label="Open search"
         aria-expanded={false}
-        className="focusRing rounded-full p-1 text-white transition hover:text-gray-300"
+        // Fills the fixed-size slot the header reserves, so opening the field —
+        // which takes the form out of flow — doesn't shift the icons beside it.
+        className="focusRing flexCenter h-full w-full rounded-full text-white transition hover:text-gray-300"
       >
         <Search className="h-5 w-5" />
       </button>
@@ -138,10 +151,12 @@ const SearchBox: React.FC = () => {
         navigateRef.current(value);
         inputRef.current?.blur();
       }}
-      /* Mobile-first: the field is too wide to sit beside the logo and nav on a
-         phone, so it covers the header row instead. From `sm` up there is room
-         for it inline, and it returns to the icon strip. */
-      className="absolute inset-x-4 z-10 flex items-center gap-2 rounded-full border border-white bg-black/95 px-4 py-1.5 sm:static sm:inset-auto sm:bg-black/80"
+      /* Anchored to the right of the header's nav column, never spilling past
+         it — the logo, bell and profile outside that column keep their places.
+         On a phone it takes the column outright, since there is no room for it
+         otherwise. From `sm` up it is a fixed width instead, so it covers only
+         as many nav items as it needs and the rest stay readable beside it. */
+      className="absolute inset-x-0 top-1/2 z-20 flex -translate-y-1/2 items-center gap-2 rounded-full border border-white bg-black/95 px-4 py-1.5 sm:left-auto sm:w-80 md:w-96"
     >
       {/* A real submit control, not decoration: tapping the magnifier is the
           obvious way to run a search, and on a phone it saves reaching for the
@@ -163,7 +178,7 @@ const SearchBox: React.FC = () => {
         placeholder="Titles, people, genres"
         aria-label="Search titles, people and genres"
         autoComplete="off"
-        className="no-searchCancel w-full min-w-0 bg-transparent small-14 text-white outline-none sm:w-48 md:w-64"
+        className="no-searchCancel w-full min-w-0 bg-transparent small-14 text-white outline-none"
       />
 
       <button

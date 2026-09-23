@@ -106,6 +106,10 @@
     @apply text-[24px] font-[500] leading-[100%];
   }
 
+  .regular-28 {
+    @apply text-[28px] font-[500] leading-[100%];
+  }
+
   .regular-30 {
     @apply text-[30px] font-[700] leading-[100%];
   }
@@ -120,6 +124,16 @@
 
   .large-40 {
     @apply text-[40px] font-[700] leading-10;
+  }
+
+  /* The oversized rank digit on a Top 10 card. Hollow rather than filled, so
+     the poster it overlaps still reads through it. There is no Tailwind
+     utility for a text stroke, which is the whole reason this lives here. */
+  .rankNumeral {
+    @apply select-none font-bold leading-none text-[6rem] md:text-[8rem];
+    color: transparent;
+    -webkit-text-stroke: 3px #71717a; /* zinc-500 */
+    paint-order: stroke fill;
   }
 
   .no-scrollbar::-webkit-scrollbar {

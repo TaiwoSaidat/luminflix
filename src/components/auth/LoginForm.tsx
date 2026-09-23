@@ -12,16 +12,24 @@ function SubmitButton() {
   return (
     <Button
       type="submit"
+      variant="brand"
       size="lg"
       disabled={pending}
-      className="w-full mt-2 bg-luminflix-red text- hover:bg-luminflix-red/90"
+      className="w-full mt-2"
     >
       {pending ? "Signing in..." : "Sign In"}
     </Button>
   );
 }
 
-export default function LoginForm({ callbackUrl }: { callbackUrl: string }) {
+export default function LoginForm({
+  callbackUrl,
+  defaultEmail,
+}: {
+  callbackUrl: string;
+  /** Carried over from the landing page's email field, when it was used. */
+  defaultEmail?: string;
+}) {
   const [state, formAction] = useActionState<LoginState, FormData>(
     authenticate,
     {}
@@ -41,6 +49,7 @@ export default function LoginForm({ callbackUrl }: { callbackUrl: string }) {
           type="email"
           autoComplete="email"
           required
+          defaultValue={defaultEmail}
           placeholder="demo@luminflix.com"
           className="inputClass w-full! bg-zinc-800/80 text-white border border-zinc-700 placeholder:text-gray-500 focus:outline-none focus:border-white/60"
         />

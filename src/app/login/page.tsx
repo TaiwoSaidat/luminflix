@@ -15,12 +15,12 @@ export const metadata: Metadata = {
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ callbackUrl?: string }>;
+  searchParams: Promise<{ callbackUrl?: string; email?: string }>;
 }) {
   const session = await auth();
   if (session?.user) redirect(ROUTES.PROFILES);
 
-  const { callbackUrl } = await searchParams;
+  const { callbackUrl, email } = await searchParams;
 
   return (
     <div className="bg-luminflix-black text-white min-h-screen flex flex-col">
@@ -34,7 +34,10 @@ export default async function LoginPage({
         <div className="w-full max-w-md bg-black/75 rounded-lg p-8 md:p-12">
           <h1 className="large-30 mb-6">Sign In</h1>
 
-          <LoginForm callbackUrl={callbackUrl ?? ROUTES.PROFILES} />
+          <LoginForm
+            callbackUrl={callbackUrl ?? ROUTES.PROFILES}
+            defaultEmail={email}
+          />
 
           {/* With no signup route, a visitor has no other way in — so the demo
               credentials have to be on the page. */}
