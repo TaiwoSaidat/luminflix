@@ -106,15 +106,19 @@ export default async function BrowsePage({
       <Header />
 
       <main className="flex-1 pageX pageTop pb-16 space-y-6 md:space-y-8">
-        <h1 className="large-30 md:large-40">{heading}</h1>
+        {/* Heading and filter share a row: the dropdown names the same thing
+            the heading does, so stacking them read as two separate controls. */}
+        <div className="flex flex-wrap items-center gap-4">
+          <h1 className="large-30 md:large-40">{heading}</h1>
 
-        {!trending && (
-          <BrowseFilters
-            mediaType={mediaType}
-            genres={genres}
-            activeGenre={activeGenreName ? genreId : undefined}
-          />
-        )}
+          {!trending && (
+            <BrowseFilters
+              mediaType={mediaType}
+              genres={genres}
+              activeGenre={activeGenreName ? genreId : undefined}
+            />
+          )}
+        </div>
 
         {items.length === 0 ? (
           <p className="regular-16 leading-relaxed text-zinc-400 max-w-2xl">
