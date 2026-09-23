@@ -5,8 +5,11 @@ import { cn } from "@/lib/utils";
 
 interface ButtonProps {
   children: React.ReactNode;
-  /** "nav" is the header pill — transparent at rest, filled on hover/active. */
-  variant?: "primary" | "secondary" | "ghost" | "nav";
+  /**
+   * "nav" is the header pill — transparent at rest, filled on hover/active.
+   * "brand" is the red call-to-action used on the landing and sign-in pages.
+   */
+  variant?: "primary" | "secondary" | "ghost" | "nav" | "brand";
   size?: "xs" | "sm" | "md" | "lg";
   /** "pill" is the fully-rounded hero treatment; everything else stays square. */
   shape?: "default" | "pill";
@@ -73,6 +76,8 @@ const Button: React.FC<ButtonProps> = ({
     nav: active
       ? "bg-white/25 text-white"
       : "bg-transparent text-gray-200 hover:bg-white/10 hover:text-white",
+    brand:
+      "font-semibold bg-luminflix-red text-white hover:bg-luminflix-red/90",
   };
 
   const sizes = {
