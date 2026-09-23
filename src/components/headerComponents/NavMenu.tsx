@@ -251,9 +251,12 @@ function ActiveNavMenu({ items }: { items: NavItem[] }) {
 
 /**
  * `useSearchParams` opts a route into client rendering unless it sits behind a
- * Suspense boundary, and the header renders on statically-rendered routes too.
- * The fallback is the same nav without its selected state, so the boundary costs
- * a highlight for one frame rather than the navigation itself.
+ * Suspense boundary. No route renders the header statically today — every one
+ * that does calls `auth()`, which makes it dynamic — so this boundary is the
+ * cheap insurance that keeps that a routing decision rather than a constraint
+ * this component quietly imposes on every page it appears on. The fallback is
+ * the same nav without its selected state, so it costs a highlight for one
+ * frame rather than the navigation itself.
  */
 const NavMenu: React.FC<{ items: NavItem[] }> = ({ items }) => (
   <Suspense fallback={<NavMenuView items={items} />}>

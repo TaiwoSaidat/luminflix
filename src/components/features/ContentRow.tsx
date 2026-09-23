@@ -1,76 +1,25 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { MediaItem } from "@/types";
+import ScrollRow from "../shared/ScrollRow";
 import VideoCard from "./VideoCard";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 
+/**
+ * A home-page row: one catalog list drawn as `VideoCard`s in a horizontal
+ * strip.
+ *
+ * No longer a Client Component — the scroll state moved into `ScrollRow` when
+ * the Top 10 row needed the same behaviour, and nothing is left here that runs
+ * in the browser. The cards are still client components in their own right.
+ */
 const ContentRow: React.FC<{ title: string; movies: MediaItem[] }> = ({
   title,
   movies,
-}) => {
-  const scrollRef = React.useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
-
-  const scroll = (direction: "left" | "right") => {
-    if (scrollRef.current) {
-      const scrollAmount = direction === "left" ? -600 : 600;
-      scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
-    }
-  };
-
-  const checkScroll = () => {
-    if (scrollRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-      setCanScrollLeft(scrollLeft > 0);
-      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
-    }
-  };
-
-  useEffect(() => {
-    checkScroll();
-    const ref = scrollRef.current;
-    ref?.addEventListener("scroll", checkScroll);
-    return () => ref?.removeEventListener("scroll", checkScroll);
-  }, []);
-
-  return (
-    <div className="space-y-4 px-4 md:px-12 relative group/row">
-      <h2 className="text-xl md:text-2xl font-bold">{title}</h2>
-
-      <div className="relative">
-        {canScrollLeft && (
-          <button
-            onClick={() => scroll("left")}
-            aria-label={`Scroll ${title} left`}
-            className="absolute left-0 top-0 bottom-0 z-10 w-12 bg-black/80 flex items-center justify-center opacity-0 group-hover/row:opacity-100 transition-opacity"
-          >
-            <ChevronLeft className="w-8 h-8" />
-          </button>
-        )}
-
-        <div
-          ref={scrollRef}
-          className="flex gap-2 overflow-x-scroll no-scrollbar scroll-smooth"
-        >
-          {movies.map((movie) => (
-            <VideoCard key={movie.id} movie={movie} />
-          ))}
-        </div>
-
-        {canScrollRight && (
-          <button
-            onClick={() => scroll("right")}
-            aria-label={`Scroll ${title} right`}
-            className="absolute right-0 top-0 bottom-0 z-10 w-12 bg-black/80 flex items-center justify-center opacity-0 group-hover/row:opacity-100 transition-opacity"
-          >
-            <ChevronRight className="w-8 h-8" />
-          </button>
-        )}
-      </div>
-    </div>
-  );
-};
+}) => (
+  <ScrollRow title={title}>
+    {movies.map((movie) => (
+      <VideoCard key={movie.id} movie={movie} />
+    ))}
+  </ScrollRow>
+);
 
 export default ContentRow;
